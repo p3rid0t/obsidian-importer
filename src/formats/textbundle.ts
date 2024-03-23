@@ -1,7 +1,7 @@
 import { normalizePath, Notice, TFolder, Platform } from 'obsidian';
 import { parseFilePath, NodePickedFolder, NodePickedFile, PickedFile, PickedFolder } from '../filesystem';
 import { FormatImporter } from '../format-importer';
-import { ProgressReporter } from '../main';
+import { ImportContext } from '../main';
 import { readZip, ZipEntryFile } from 'zip';
 
 const assetMatcher = /!\[\]\(assets\/([^)]*)\)/g;
@@ -27,7 +27,7 @@ export class TextbundleImporter extends FormatImporter {
 		this.addOutputLocationSetting('Textbundle');
 	}
 
-	async import(progress: ProgressReporter): Promise<void> {
+	async import(progress: ImportContext): Promise<void> {
 		let { files } = this;
 		if (files.length === 0) {
 			new Notice('Please pick at least one file to import.');
@@ -106,7 +106,7 @@ export class TextbundleImporter extends FormatImporter {
 		return Object.values(buckets);
 	}
 
-	async process(progress: ProgressReporter, bundleName: string, entries: (PickedFile | PickedFolder | ZipEntryFile)[]) {
+	async process(progress: ImportContext, bundleName: string, entries: (PickedFile | PickedFolder | ZipEntryFile)[]) {
 		// First look for the info.json and check that the file type is Markdown
 		const infojson = entries.find((entry) => entry.name === 'info.json');
 		if (infojson) {
@@ -166,7 +166,7 @@ export class TextbundleImporter extends FormatImporter {
 		}
 	}
 
-	async importAsset(progress: ProgressReporter, entry: PickedFile | PickedFolder | ZipEntryFile): Promise<void> {
+	async importAsset(progress: ImportContext, entry: PickedFile | PickedFolder | ZipEntryFile): Promise<void> {
 		if (entry.type === 'folder') {
 			progress.reportSkipped(entry.name);
 			return;

@@ -43,9 +43,6 @@ export const ATTACHMENT_EXTS = ['png', 'webp', 'jpg', 'jpeg', 'gif', 'bmp', 'svg
  */
 export type AuthCallback = (data: any) => void;
 
-// Temporary compatibility for in progress PRs
-export type ProgressReporter = ImportContext;
-
 export class ImportContext {
 	notes = 0;
 	attachments = 0;
